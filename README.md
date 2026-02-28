@@ -13,55 +13,39 @@ A Python implementation of a Random Forest Regressor built from scratch using on
     *   Aggregates predictions via averaging.
 *   **Zero Dependencies**: The core logic relies solely on `numpy`.
 
-## Installation
+## Performance Evaluation
 
-Clone the repository:
+To validate the implementation, we tested the Random Forest Regressor on a synthetic dataset with non-linear interactions and noise.
 
-```bash
-git clone <repository-url>
-cd random-forest-scratch
-```
+### Test Setup
 
-Install dependencies (only `numpy` is required for the model):
+*   **Dataset**: Synthetic regression data generated using `numpy`.
+*   **Equation**: $y = x_0 + 2x_1 - 3x_2 + 0.5x_1x_2 + \text{noise}$
+*   **Samples**: 500 (80% Train, 20% Test)
+*   **Features**: 10 (Only first 3 are informative)
+*   **Model Parameters**:
+    *   `n_estimators`: 20
+    *   `max_depth`: 10
+    *   `min_samples_split`: 2
+    *   `max_features`: 0.8
 
-```bash
-pip install numpy
-```
+### Results
 
-## Usage
+The model achieved high accuracy on the test set, demonstrating its ability to capture the underlying patterns despite the noise and irrelevant features.
 
-### Training a Model
+*   **Mean Squared Error (MSE)**: 0.0458
+*   **R² Score**: 0.9631
 
-```python
-import numpy as np
-from random_forest.random_forest import RandomForestRegressor
+### Visualization
 
-# Generate dummy data
-X = np.random.rand(100, 5)
-y = np.sum(X, axis=1)
+The scatter plot below shows the Predicted values vs. True values. The proximity of the points to the red dashed line ($y=x$) indicates accurate predictions.
 
-# Initialize and train
-rf = RandomForestRegressor(n_estimators=100, min_samples_split=2, max_depth=10, max_features=0.8)
-rf.fit(X, y)
-
-# Predict
-predictions = rf.predict(X[:5])
-print(predictions)
-```
-
-## Testing
-
-To run the test script which trains the model on a synthetic dataset and evaluates performance:
-
-```bash
-python3 tests/test_random_forest.py
-```
+![Random Forest Results](rf_results.png)
 
 ## Project Structure
 
 *   `random_forest/`: Core library package.
     *   `decision_tree.py`: Implementation of a single Decision Tree.
     *   `random_forest.py`: Implementation of the Random Forest ensemble.
-*   `tests/`: Test scripts.
+*   `test/`: Test scripts.
     *   `test_random_forest.py`: Performance evaluation script.
-

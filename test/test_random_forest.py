@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import sys
 import os
 
@@ -16,7 +17,6 @@ def generate_synthetic_data(n_samples=500, n_features=10, noise=0.1):
     np.random.seed(42)
     X = np.random.rand(n_samples, n_features)
     
-    # Define a somewhat complex relationship
     # Only the first 3 features are informative
     y = X[:, 0] + 2 * X[:, 1] - 3 * X[:, 2] + 0.5 * X[:, 1] * X[:, 2]
     
@@ -43,16 +43,27 @@ def r2_score(y_true, y_pred):
     ss_tot = np.sum((y_true - np.mean(y_true))**2)
     return 1 - (ss_res / ss_tot)
 
+def plot_results(y_test, y_pred):
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_test, y_pred, color='blue', alpha=0.5, label='Predictions')
+    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--', label='Perfect Prediction')
+    plt.xlabel('True Values')
+    plt.ylabel('Predicted Values')
+    plt.title('Random Forest Regression: True vs Predicted')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('rf_results.png')
+    print("Plot saved as rf_results.png")
+
 def test_random_forest():
     print("Generating synthetic data...")
-    X, y = generate_synthetic_data(n_samples=200, n_features=5)
+    X, y = generate_synthetic_data(n_samples=500, n_features=10)
     
     X_train, y_train, X_test, y_test = train_test_split(X, y, test_size=0.2)
     print(f"Data shape: X_train={X_train.shape}, X_test={X_test.shape}")
     
     print("\nTraining Random Forest...")
-    # Using a small forest for speed in this demo
-    rf = RandomForestRegressor(n_estimators=10, min_samples_split=5, max_depth=5, max_features=0.8)
+    rf = RandomForestRegressor(n_estimators=20, min_samples_split=2, max_depth=10, max_features=0.8)
     
     start_time = time.time()
     rf.fit(X_train, y_train)
@@ -68,9 +79,7 @@ def test_random_forest():
     print(f"RMSE: {np.sqrt(mse(y_test, y_pred)):.4f}")
     print(f"R2 Score: {r2_score(y_test, y_pred):.4f}")
     
-    print("\nSample Predictions vs Actual:")
-    for i in range(5):
-        print(f"Predicted: {y_pred[i]:.4f}, Actual: {y_test[i]:.4f}, Diff: {abs(y_pred[i] - y_test[i]):.4f}")
+    plot_results(y_test, y_pred)
 
 if __name__ == "__main__":
     test_random_forest()

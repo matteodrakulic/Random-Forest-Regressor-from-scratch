@@ -36,15 +36,11 @@ class DecisionTreeRegressor:
         self.root = None
 
     def fit(self, X, y):
-        """
-        Build the decision tree from the training set (X, y).
-        """
+        # Build the decision tree from the training set (X, y).
         self.root = self._build_tree(X, y)
 
     def _build_tree(self, X, y, depth=0):
-        """
-        Recursively build the tree.
-        """
+        # Recursively build the tree.
         num_samples, num_features = X.shape
         
         # Stopping criteria
@@ -63,9 +59,7 @@ class DecisionTreeRegressor:
         return Node(value=leaf_value)
 
     def _get_best_split(self, X, y, num_features):
-        """
-        Find the best split for the dataset.
-        """
+        # Find the best split for the dataset.
         best_split = {}
         max_var_red = -float("inf")
         
@@ -109,9 +103,7 @@ class DecisionTreeRegressor:
         return best_split
 
     def _split(self, X, y, feature_index, threshold):
-        """
-        Split the data based on a feature and a threshold.
-        """
+        # Split the data based on a feature and a threshold.
         left_indices = np.where(X[:, feature_index] <= threshold)[0]
         right_indices = np.where(X[:, feature_index] > threshold)[0]
         
@@ -123,9 +115,7 @@ class DecisionTreeRegressor:
         return X_left, y_left, X_right, y_right
 
     def _calculate_variance_reduction(self, y, y_left, y_right):
-        """
-        Calculate variance reduction.
-        """
+        # Calculate variance reduction.
         var_total = np.var(y)
         var_left = np.var(y_left)
         var_right = np.var(y_right)
@@ -139,22 +129,16 @@ class DecisionTreeRegressor:
         return variance_reduction
 
     def _calculate_leaf_value(self, y):
-        """
-        Calculate the value of a leaf node (mean of target values).
-        """
+        # Calculate the value of a leaf node (mean of target values).
         return np.mean(y)
 
     def predict(self, X):
-        """
-        Predict regression value for X.
-        """
+        # Predict regression value for X.
         predictions = [self.make_prediction(x, self.root) for x in X]
         return np.array(predictions)
 
     def make_prediction(self, x, tree):
-        """
-        Predict a single data point.
-        """
+        # Predict a single data point.
         if tree.value is not None:
             return tree.value
         

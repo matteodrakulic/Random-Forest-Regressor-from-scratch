@@ -19,9 +19,7 @@ class RandomForestRegressor:
         self.trees = []
 
     def fit(self, X, y):
-        """
-        Build the random forest from the training set (X, y).
-        """
+        # Build the random forest from the training set (X, y).
         self.trees = []
         for _ in range(self.n_estimators):
             tree = DecisionTreeRegressor(
@@ -38,17 +36,12 @@ class RandomForestRegressor:
             self.trees.append(tree)
 
     def _bootstrap_sample(self, X, y):
-        """
-        Create a bootstrap sample (random sampling with replacement).
-        """
+        # Create a bootstrap sample (random sampling with replacement).
         n_samples = X.shape[0]
         indices = np.random.choice(n_samples, n_samples, replace=True)
         return X[indices], y[indices]
 
     def predict(self, X):
-        """
-        Predict regression value for X.
-        """
         # Get predictions from all trees
         tree_preds = np.array([tree.predict(X) for tree in self.trees])
         
